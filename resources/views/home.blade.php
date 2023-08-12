@@ -14,7 +14,9 @@
                         </div>
                     @endif
 
-                    {{ __('You are logged in!') }}
+                    <p>{{ __('Hola, bienvenido al Hub!') }}</p>
+
+                    <a href="{{ route('linkedin.redirect') }}" class="btn btn-primary">Conectar con LinkedIn</a>
                 </div>
             </div>
         </div>

@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LinkedInOAuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,6 +24,9 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+Route::get('/auth/linkedin', [LinkedInOAuthController::class, 'redirectToLinkedIn'])->name('linkedin.redirect');
+Route::get('/auth/linkedin/callback', [LinkedInOAuthController::class, 'handleLinkedInCallback'])->name('linkedin.callback');
 Route::middleware(['2fa'])->group(function () {
    
     Route::get('/home', [HomeController::class, 'index'])->name('home');
