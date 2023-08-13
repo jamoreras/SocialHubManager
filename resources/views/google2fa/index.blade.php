@@ -2,7 +2,7 @@
   
 @section('content')
 <div class="container">
-    <div class="row justify-content-center align-items-center " style="height: 70vh;S">
+    <div class="row justify-content-center align-items-center " style="height: 70vh;">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
                 <div class="panel-heading font-weight-bold">Register</div>

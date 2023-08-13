@@ -14,12 +14,21 @@
                         </div>
                     @endif
                     
+
                     <p>{{ __('Hola, bienvenido al Hub!') }}</p>
-                    <!-- Botón para conectar con LinkedIn -->
-                    <a href="{{ route('redirectlinkedin') }}" class="btn btn-primary">Conectar con LinkedIn</a>
+                     <!-- Formulario para ingresar el mensaje a publicar -->
+                     <form method="POST" action="{{ route('linkedin.post') }}">
+                     @csrf
+                        <div class="mb-3">
+                            <label for="message" class="form-label">Mensaje a publicar en LinkedIn</label>
+                            <input type="text" class="form-control" id="message" name="message" value="">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Publicar en LinkedIn</button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
 @endsection
+
