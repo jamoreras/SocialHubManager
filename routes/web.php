@@ -5,7 +5,9 @@ use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LinkedInOAuthController;
-use App\Http\Controllers\PostController;
+use App\Http\Controllers\QueueController;
+use App\Http\Controllers\RedditOAuthController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -25,9 +27,16 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
-
+Route::get('/linkedin/redirect', [LinkedInOAuthController::class, 'redirectToLinkedIn'])->name('redirectlinkedin');
 Route::get('/auth/linkedin', [LinkedInOAuthController::class, 'redirectToLinkedIn'])->name('linkedin.redirect');
 Route::get('/auth/linkedin/callback', [LinkedInOAuthController::class, 'handleLinkedInCallback'])->name('linkedin.callback');
+Route::get('/queue', [QueueController::class, 'index'])->name('queue');
+Route::post('/queue/add', [QueueController::class, 'addToQueue'])->name('addToQueue');
+Route::post('linkedin/post', [LinkedInOAuthController::class, 'sendLinkedInMessage'])->name('linkedin.post');
+Route::get('linkedin/post', [LinkedInOAuthController::class, 'sendLinkedInMessage'])->name('posteo');
+Route::get('publicacionesLinkedin', [LinkedInOAuthController::class, 'publicacionesLinkedin'])->name('publicacionesLinkedin');
+
+
 Route::middleware(['2fa'])->group(function () {
    
     Route::get('/home', [HomeController::class, 'index'])->name('home');
@@ -38,5 +47,12 @@ Route::middleware(['2fa'])->group(function () {
   
 Route::get('/complete-registration', [RegisterController::class, 'completeRegistration'])->name('complete.registration');
 
+Route::get('/reddit/redirect', [RedditOAuthController::class, 'redirectToReddit'])->name('reddit.redirect');
+Route::get('/auth/reddit', [RedditOAuthController::class, 'redirectToReddit'])->name('reddit.redirect');
+Route::get('/auth/reddit/callback', [RedditOAuthController::class, 'handleRedditCallback'])->name('reddit.callback');
 
-Route::post('/post', [PostController::class, 'create'])->name('post.create');
+Route::post('/reddit/post', [RedditOAuthController::class, 'sendRedditMessage'])->name('reddit.post');
+Route::get('/reddit/post', [RedditOAuthController::class, 'show'])->name('reddit.post');
+
+
+

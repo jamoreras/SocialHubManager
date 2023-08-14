@@ -52,8 +52,4 @@ class User extends Authenticatable
             set: fn ($value) =>  encrypt($value),
         );
     }
-
-    public function posts(){  // $user->posts
-        return $this->hasMany(Post::class);
-      }
 }

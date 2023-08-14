@@ -13,17 +13,31 @@
                             {{ session('status') }}
                         </div>
                     @endif
-
+                    
                     <p>{{ __('Hola, bienvenido al Hub!') }}</p>
+                    <!-- Botón para conectar con LinkedIn -->
+                    <a href="{{ route('redirectlinkedin') }}" class="btn btn-primary">Conectar con LinkedIn</a>
+                    <a href="{{ route('reddit.redirect') }}" class="btn btn-primary">Conectar con Reddit</a>
+                    @if (session('success'))
+                        <div class="alert alert-success my-3" id="message">{{ session('success') }}</div>
+                    @endif
 
-                    <a href="{{ route('linkedin.redirect') }}" class="btn btn-primary">Conectar con LinkedIn</a>
+                    @if (session('error'))
+                        <div class="alert alert-danger my-3" id="message">{{ session('error') }}</div>
+                    @endif
+                  
                 </div>
-
-                <x-post-form />
-
-                
             </div>
         </div>
     </div>
 </div>
+<script>
+ 
+    setTimeout(function() {
+        var successMessage = document.getElementById('message');
+        if (successMessage) {
+            successMessage.style.display = 'none';
+        }
+    }, 3000);
+</script>
 @endsection
