@@ -64,7 +64,7 @@ class LinkedInOAuthController extends Controller
          Session::put('linkedin_user_id', $code);
         
 
-        return redirect()->route('publicacionesLinkedin')->with('success', '¡Autenticación con LinkedIn exitosa!');
+        return redirect()->route('publicacionesLinkedin')->with('success', '¡Autenticación con LinkedIn exitosa!'); 
     }
     public function sendLinkedInMessage(Request $request)
     {
@@ -93,6 +93,7 @@ class LinkedInOAuthController extends Controller
 
         return view('publicacionesLinkedin');
     }
+ 
 }
  
     

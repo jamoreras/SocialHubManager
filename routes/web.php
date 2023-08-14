@@ -1,11 +1,14 @@
 <?php
 
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\CrudController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LinkedInOAuthController;
 use App\Http\Controllers\QueueController;
+use App\Http\Controllers\CrudHorarioController;
+use App\Models\CrudHorario;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,6 +36,14 @@ Route::post('/queue/add', [QueueController::class, 'addToQueue'])->name('addToQu
 Route::post('linkedin/post', [LinkedInOAuthController::class, 'sendLinkedInMessage'])->name('linkedin.post');
 Route::get('linkedin/post', [LinkedInOAuthController::class, 'sendLinkedInMessage'])->name('posteo');
 Route::get('publicacionesLinkedin', [LinkedInOAuthController::class, 'publicacionesLinkedin'])->name('publicacionesLinkedin');
+Route::get('crudHorario', [CrudHorarioController::class, 'index'])->name('index'); 
+Route::post('store/horarios', [CrudHorarioController::class, 'store'])->name('storage-horario'); 
+Route::delete('/horarios/{id}', [CrudHorarioController::class, 'destroy'])->name('horarios.destroy');
+Route::get('/horarios/{horario}/editar', [CrudHorarioController::class,'edit'])->name('horarios.edit');
+Route::put('/horarios/{horario}', [CrudHorarioController::class,'update'])->name('horarios.update');
+
+
+
 
 
 Route::middleware(['2fa'])->group(function () {
