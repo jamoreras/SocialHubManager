@@ -24,6 +24,8 @@
                             <input type="text" class="form-control" id="message" name="message" value="">
                         </div>
                         <button type="submit" class="btn btn-primary">Publicar en LinkedIn</button>
+                        <button formaction="{{ route('addToQueue') }}" type="submit" class="btn btn-warning">Publicar en Cola</button>
+
                     </form>
                 </div>
             </div>

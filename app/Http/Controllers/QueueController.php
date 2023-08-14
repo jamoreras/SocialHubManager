@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Publication;
+use Illuminate\Support\Facades\Auth;
 
 class QueueController extends Controller
 {
@@ -16,20 +17,29 @@ class QueueController extends Controller
 
     public function addToQueue(Request $request)
     {
+        $userID = Auth::id();
+        $scheduleNull = $request->input('social_media');
+        if(!$scheduleNull){
+        $scheduleNull ="linkedin";
+
+        }
+       
         $validatedData = $request->validate([
             'message' => 'required',
-            'scheduled_at' => 'required|date',
-            'social_media' => 'required'
+
+       
         ]);
 
         Publication::create([
             'message' => $validatedData['message'],
-            'scheduled_at' => $validatedData['scheduled_at'],
-            'social_media' => $validatedData['social_media'],
-            'status' => 'pending'
+            'scheduled_at' =>$request->input('scheduled_at'),
+            'social_media' => $scheduleNull,
+            'status' => 'pending',
+            'user_id' => $userID,
             
         ]);
 
         return redirect()->route('queue')->with('success', 'Publicación agregada a la cola');
     }
+
 }

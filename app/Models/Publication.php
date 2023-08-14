@@ -8,5 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class Publication extends Model
 {
     use HasFactory;
-    protected $fillable = ['message', 'scheduled_at', 'status', 'social_media'];
+    protected $fillable = ['user_id','message', 'scheduled_at', 'status', 'social_media', 'title', 'subreddit'];
 }
