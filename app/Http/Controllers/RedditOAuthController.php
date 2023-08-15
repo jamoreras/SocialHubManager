@@ -27,7 +27,7 @@ class RedditOAuthController extends Controller
             'state' => $state,
             'redirect_uri' => env('REDDIT_REDIRECT_URI'),
             'duration' => 'temporary', // or 'temporary'
-            'scope' => 'identity', // Add more scopes as needed
+            'scope' => 'submit', // Add more scopes as needed
         ]);
 
         $url = 'https://www.reddit.com/api/v1/authorize?' . $queryParams;
@@ -54,7 +54,7 @@ class RedditOAuthController extends Controller
             'code' => $code,
             'redirect_uri' => route('reddit.callback'), 
         ]);
-    
+
         if ($response->successful()) {
             $accessToken = $response['access_token'];
     
@@ -74,26 +74,26 @@ class RedditOAuthController extends Controller
 
     public function sendRedditMessage(Request $request)
     {
-        
         $accessToken = Session::get('reddit_access_token');
        
-
+        
+       
         $response = Http::withHeaders([
             'Authorization' => 'Bearer ' . $accessToken,
-            'User-Agent' => 'isw811',
+            'User-Agent' => 'isw811/1.0', 
         ])->post('https://oauth.reddit.com/api/submit', [
-                    'title' => $request->title,
-                    'text' => $request->text,
-                    'sr' => $request->subreddit,
-                ]);
-
+            'kind' => 'self', 
+            'sr' => $request->subreddit,
+            'title' => $request->title,
+            'text' => $request->text,
+        ]);
+        dd($response->json());
         if ($response->successful()) {
-            dd($response->json()); 
+           
             return redirect('/home')->with('success', '¡Publicación en Reddit exitosa!');
         } else {
-            dd($response->json()); 
+           
             return redirect('/home')->with('error', '¡Publicación en Reddit ha fallado!');
         }
     }
-
 }
