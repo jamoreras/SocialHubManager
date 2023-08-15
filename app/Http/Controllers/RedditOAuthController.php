@@ -74,26 +74,40 @@ class RedditOAuthController extends Controller
 
     public function sendRedditMessage(Request $request)
     {
+        $apiCallEndpoint = 'https://oauth.reddit.com/api/submit';
+        $username = 'joe-tony';
+        $accessTokenType = 'Bearer';
         $accessToken = Session::get('reddit_access_token');
-       
-        
-       
-        $response = Http::withHeaders([
-            'Authorization' => 'Bearer ' . $accessToken,
-            'User-Agent' => 'isw811/1.0', 
-        ])->post('https://oauth.reddit.com/api/submit', [
-            'kind' => 'self', 
-            'sr' => $request->subreddit,
-            'title' => $request->title,
+        $postData = array(
             'text' => $request->text,
-        ]);
-        dd($response->json());
-        if ($response->successful()) {
+            'title' => $request->title,
+            'sr' => $request->subreddit,
+            'kind' => 'self'
+        );
+
+        // curl settings and call to post to the subreddit
+        $ch = curl_init( $apiCallEndpoint );
+        curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+        curl_setopt( $ch, CURLOPT_USERAGENT,  $request->subreddit . ' by /u/' . $username . ' (ISW 1.0)' );
+        curl_setopt( $ch, CURLOPT_HTTPHEADER, array( "Authorization: " . $accessTokenType . " " . $accessToken ) );
+        curl_setopt( $ch, CURLOPT_CUSTOMREQUEST, 'POST' );
+        curl_setopt( $ch, CURLOPT_POSTFIELDS, $postData );
+        curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, FALSE );
+        
+        // curl response from our post call
+        $response_raw = curl_exec( $ch );
+        $response = json_decode( $response_raw );
+        curl_close( $ch );
+
+     
+        if ($response->success) {
            
             return redirect('/home')->with('success', '¡Publicación en Reddit exitosa!');
         } else {
            
             return redirect('/home')->with('error', '¡Publicación en Reddit ha fallado!');
         }
+
+
     }
 }
