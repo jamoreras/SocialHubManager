@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LinkedInOAuthController;
 use App\Http\Controllers\QueueController;
 use App\Http\Controllers\RedditOAuthController;
+use App\Http\Controllers\TumblrOAuthController;
 
 
 /*
@@ -48,11 +49,16 @@ Route::middleware(['2fa'])->group(function () {
 Route::get('/complete-registration', [RegisterController::class, 'completeRegistration'])->name('complete.registration');
 
 Route::get('/reddit/redirect', [RedditOAuthController::class, 'redirectToReddit'])->name('reddit.redirect');
-Route::get('/auth/reddit', [RedditOAuthController::class, 'redirectToReddit'])->name('reddit.redirect');
+Route::get('/auth/reddit', [RedditOAuthController::class, 'redirectToReddit'])->name('reddit.auth');
 Route::get('/auth/reddit/callback', [RedditOAuthController::class, 'handleRedditCallback'])->name('reddit.callback');
-
 Route::post('/reddit/post', [RedditOAuthController::class, 'sendRedditMessage'])->name('reddit.post');
-Route::get('/reddit/post', [RedditOAuthController::class, 'show'])->name('reddit.post');
+//Route::get('/reddit/post', [RedditOAuthController::class, 'show'])->name('reddit.post');
 
+
+Route::get('/tumblr/redirect', [TumblrOAuthController::class, 'redirectToTumblr'])->name('tumblr.redirect');
+Route::get('/auth/tumblr', [TumblrOAuthController::class, 'redirectToTumblr'])->name('tumblr.auth');
+Route::get('/auth/tumblr/callback', [TumblrOAuthController::class, 'handleTumblrCallback'])->name('tumblr.callback');
+Route::post('/tumblr/post', [TumblrOAuthController::class, 'sendTumblrMessage'])->name('tumblr.post');
+//Route::get('/tumblr/post', [TumblrOAuthController::class, 'show'])->name('tumblr.post');
 
 

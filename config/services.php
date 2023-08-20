@@ -37,4 +37,10 @@ return [
         'redirect' => env('REDDIT_REDIRECT_URI'),
     ],
 
+    'tumblr' => [
+        'client_id' => env('TUMBLR_CLIENT_ID'),
+        'client_secret' => env('TUMBLR_CLIENT_SECRET'),
+        'redirect_uri' => env('TUMBLR_REDIRECT_URI'),
+    ],
+
 ];

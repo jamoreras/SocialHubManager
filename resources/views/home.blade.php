@@ -18,6 +18,8 @@
                     <!-- Botón para conectar con LinkedIn -->
                     <a href="{{ route('redirectlinkedin') }}" class="btn btn-primary">Conectar con LinkedIn</a>
                     <a href="{{ route('reddit.redirect') }}" class="btn btn-primary">Conectar con Reddit</a>
+                    <a href="{{ route('tumblr.redirect') }}" class="btn btn-primary">Conectar con Tumblr</a>
+
                     @if (session('success'))
                         <div class="alert alert-success my-3" id="message">{{ session('success') }}</div>
                     @endif
