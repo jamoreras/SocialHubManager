@@ -15,13 +15,13 @@
                         <div class="mb-3">
                             <label for="day_of_week" class="form-label">Día de la Semana</label>
                             <select class="form-select" id="day_of_week" name="day_of_week">
-                                <option value="Monday" {{ $horario->day_of_week === 'Monday' ? 'selected' : '' }}>Lunes</option>
-                                <option value="Tuesday" {{ $horario->day_of_week === 'Tuesday' ? 'selected' : '' }}>Martes</option>
-                                <option value="Wednesday" {{ $horario->day_of_week === 'Wednesday' ? 'selected' : '' }}>Miércoles</option>
-                                <option value="Thursday" {{ $horario->day_of_week === 'Thursday' ? 'selected' : '' }}>Jueves</option>
-                                <option value="Friday" {{ $horario->day_of_week === 'Friday' ? 'selected' : '' }}>Viernes</option>
-                                <option value="Saturday" {{ $horario->day_of_week === 'Saturday' ? 'selected' : '' }}>Sábado</option>
-                                <option value="Sunday" {{ $horario->day_of_week === 'Sunday' ? 'selected' : '' }}>Domingo</option>
+                                <option value="monday" {{ $horario->day_of_week === 'monday' ? 'selected' : '' }}>Lunes</option>
+                                <option value="tuesday" {{ $horario->day_of_week === 'tuesday' ? 'selected' : '' }}>Martes</option>
+                                <option value="wednesday" {{ $horario->day_of_week === 'wednesday' ? 'selected' : '' }}>Miércoles</option>
+                                <option value="thursday" {{ $horario->day_of_week === 'thursday' ? 'selected' : '' }}>Jueves</option>
+                                <option value="friday" {{ $horario->day_of_week === 'friday' ? 'selected' : '' }}>Viernes</option>
+                                <option value="saturday" {{ $horario->day_of_week === 'saturday' ? 'selected' : '' }}>Sábado</option>
+                                <option value="sunday" {{ $horario->day_of_week === 'sunday' ? 'selected' : '' }}>Domingo</option>
                             </select>
                         </div>
 

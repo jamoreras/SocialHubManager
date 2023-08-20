@@ -14,13 +14,13 @@
                         <div class="mb-3">
                             <label for="day_of_week" class="form-label">Día de la Semana</label>
                             <select class="form-select" id="day_of_week" name="day_of_week">
-                                <option value="Monday">Lunes</option>
-                                <option value="Tuesday">Martes</option>
-                                <option value="Wednesday">Miércoles</option>
-                                <option value="Thursday">Jueves</option>
-                                <option value="Friday">Viernes</option>
-                                <option value="Saturday">Sábado</option>
-                                <option value="Sunday">Domingo</option>
+                                <option value="monday">Lunes</option>
+                                <option value="tuesday">Martes</option>
+                                <option value="wednesday">Miércoles</option>
+                                <option value="thursday">Jueves</option>
+                                <option value="friday">Viernes</option>
+                                <option value="saturday">Sábado</option>
+                                <option value="sunday">Domingo</option>
                             </select>
                         </div>
 

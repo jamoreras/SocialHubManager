@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\HubCrudHorario;
+use App\Models\LinkedInCredential;
+use App\Models\Publication;
+
 
 class CrudHorarioController extends Controller
 {
@@ -13,13 +16,20 @@ class CrudHorarioController extends Controller
         return view('create', compact('horarios'));
     }
 
-
+   
     public function store(Request $request)
     {
         $request->validate([
             'day_of_week' => 'required',
             'time' => 'required'
         ]);
+  
+       // $instancia = new LinkedInCredential();
+       // $datos = $instancia->getByUserId(2);
+        //dd( $datos);
+        
+
+        // dd($datos);
 
         HubCrudHorario::create([
             'user_id' => auth()->user()->id, // Cambia esto según tu modelo de usuario
