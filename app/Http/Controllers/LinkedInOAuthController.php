@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\LinkedInCredential;
 use Illuminate\Support\Facades\Http;
 use GuzzleHttp\Client;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
 class LinkedInOAuthController extends Controller
@@ -62,9 +64,18 @@ class LinkedInOAuthController extends Controller
          $code = $profile["id"];
          Session::put('linkedin_access_token', $accessToken);
          Session::put('linkedin_user_id', $code);
+
+        LinkedInCredential::updateOrCreate(
+            ['user_id' => Auth::id()], // Suponiendo que estás autenticando usuarios en tu aplicación
+            [
+                'client_id' => $code,
+                'access_token' => $accessToken,
+            ]
+        );
+
         
 
-        return redirect()->route('publicacionesLinkedin')->with('success', '¡Autenticación con LinkedIn exitosa!');
+        return redirect()->route('publicacionesLinkedin')->with('success', '¡Autenticación con LinkedIn exitosa!'); 
     }
     public function sendLinkedInMessage(Request $request)
     {
@@ -73,7 +84,7 @@ class LinkedInOAuthController extends Controller
        
         // Puedes usar el $accessToken para hacer solicitudes a la API de LinkedIn
       
-        $shareData = [
+        $estructura = [
             "owner" => "urn:li:person:{$code}",
             "text" => [
                 "text" => $request->input('message'),
@@ -82,7 +93,7 @@ class LinkedInOAuthController extends Controller
         $response = Http::withHeaders([
             'Authorization' => "Bearer {$accessToken}",
             'Content-Type' => 'application/json',
-        ])->post('https://api.linkedin.com/v2/shares', $shareData);
+        ])->post('https://api.linkedin.com/v2/shares', $estructura);
 
         // Limpiar la sesión
         session()->forget('linkedin_message');
@@ -93,6 +104,7 @@ class LinkedInOAuthController extends Controller
 
         return view('publicacionesLinkedin');
     }
+ 
 }
  
     
