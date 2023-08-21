@@ -11,12 +11,12 @@
                     <form method="post" action="{{ route('tumblr.post') }}">
                         @csrf
                         <div class="form-group">
-                            <label for="post_title">Post Title:</label>
-                            <input type="text" class="form-control" name="post_title" id="post_title" required>
+                            <label for="title">Post Title:</label>
+                            <input type="text" class="form-control" name="title" id="title" required>
                         </div>
                         <div class="form-group">
-                            <label for="post_body">Post Body:</label>
-                            <textarea class="form-control" name="post_body" id="post_body" required></textarea>
+                            <label for="body">Post Body:</label>
+                            <textarea class="form-control" name="body" id="body" required></textarea>
                         </div>
                       
 

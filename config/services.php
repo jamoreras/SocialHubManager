@@ -41,6 +41,7 @@ return [
         'client_id' => env('TUMBLR_CLIENT_ID'),
         'client_secret' => env('TUMBLR_CLIENT_SECRET'),
         'redirect_uri' => env('TUMBLR_REDIRECT_URI'),
+        'blog_name' => env('TUMBLR_BLOG_NAME')
     ],
 
 ];
