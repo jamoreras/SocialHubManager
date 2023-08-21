@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
          $schedule->command('hub:tarea')->everyMinute();
+         $schedule->command('app:init')->everyMinute();
     }
 
     /**
@@ -23,7 +24,7 @@ class Kernel extends ConsoleKernel
     {
         $this->load(__DIR__.'/Commands');
         Commands\tarea::class;
-
+        Commands\Tareaprogramada::class;
         require base_path('routes/console.php');
     }
 }
