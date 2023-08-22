@@ -16,12 +16,13 @@
                         </div>
                         <div class="form-group">
                             <label for="text">Text:</label>
-                            <textarea class="form-control" name="text" id="text" required></textarea>
+                            <textarea class="form-control" name="message" id="message" required></textarea>
                         </div>
                         <div class="form-group">
                             <label for="subreddit">Subreddit:</label>
                             <input type="text" class="form-control" name="subreddit" id="subreddit" required>
                         </div>
+                        <input type="hidden" name="social_media" value="reddit">
                         <button type="submit" class="btn btn-primary my-3">Publicar ahora</button>
                         <button formaction="{{ route('addToQueue') }}" type="submit" class="btn btn-warning">Publicar en Cola</button>
                     </form>

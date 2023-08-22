@@ -88,7 +88,7 @@ class RedditOAuthController extends Controller
         $accessTokenType = 'Bearer';
         //$accessToken = Session::get('reddit_access_token');
         $postData = array(
-            'text' => $request->text,
+            'text' => $request->message,
             'title' => $request->title,
             'sr' => $request->subreddit,
             'kind' => 'self'

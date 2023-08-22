@@ -15,9 +15,10 @@
                             <input type="text" class="form-control" name="title" id="title" required>
                         </div>
                         <div class="form-group">
-                            <label for="body">Post Body:</label>
-                            <textarea class="form-control" name="body" id="body" required></textarea>
+                            <label for="message">Post Body:</label>
+                            <textarea class="form-control" name="message" id="message" required></textarea>
                         </div>
+                        <input type="hidden" name="social_media" value="tumblr">
                       
 
                         <button type="submit" class="btn btn-primary my-3">Publicar ahora</button>

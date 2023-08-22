@@ -51,6 +51,7 @@ class Tareaprogramada extends Command
                 Storage::append("archivo.txt", "Mensaje de publicación: " . $publicacion->message);
             } else {//if igual al de arriba pero para reddit
 
+                
             }
         
                     }

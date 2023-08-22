@@ -19,24 +19,29 @@ class QueueController extends Controller //Este controlador  maneja las acciones
     public function addToQueue(Request $request) // Agrega una nueva publicación a la cola  Valida los datos del formulario, como el mensaje de la publicación. Luego, crea un nuevo registro en la base de datos con la información proporcionada, incluido el usuario actual y el estado pendiente. Este controlador es responsable de administrar la cola de publicaciones, agregando nuevas publicaciones a la cola y mostrando las publicaciones pendientes y enviadas en la vista. Las rutas asociadas, como 'queue', deben estar definidas en tu archivo routes/web.php.
     {
         $userID = Auth::id();
-        $scheduleNull = $request->input('social_media');
-
-        if (!$scheduleNull) {
-            $scheduleNull = "linkedin";
-        }
+        $socialMedia = $request->input('social_media');
+        $title = $request->input('title');
+        $subreddit = $request->input('subreddit');
 
         $validatedData = $request->validate([  // Valida los datos ingresados en el formulario
             'message' => 'required',
-
-
         ]);
+        
+        if (!$title) {
+            $title=null;
+        }
+        if (!$subreddit) {
+            $subreddit =null;
+        }
 
         Publication::create([  // Crea una nueva publicación en la base de datos
             'message' => $validatedData['message'],
             'scheduled_at' => $request->input('scheduled_at'),
-            'social_media' => $scheduleNull,
+            'social_media' => $socialMedia,
             'status' => 'pending',
             'user_id' => $userID,
+            'title' => $title,
+            'subreddit' => $subreddit,
 
         ]);
 

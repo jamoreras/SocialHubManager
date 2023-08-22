@@ -21,8 +21,9 @@
                      @csrf
                         <div class="mb-3">
                             <label for="message" class="form-label">Mensaje a publicar en LinkedIn</label>
-                            <input type="text" class="form-control" id="message" name="message" value="">
+                            <input type="text" class="form-control" id="message" name="message" value="" required>
                         </div>
+                        <input type="hidden" name="social_media" value="linkedin">
                         <button type="submit" class="btn btn-primary">Publicar ahora</button>
                         <button formaction="{{ route('addToQueue') }}" type="submit" class="btn btn-warning">Publicar en Cola</button>
                     </form>

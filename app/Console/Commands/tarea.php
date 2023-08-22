@@ -53,6 +53,7 @@ class tarea extends Command
                     $cola->save();
                 }else{//reddit // Envía el mensaje a otras redes sociales (Reddit u otras)
                     //enviar mensaje
+                    
                     $cola->status = 'sent';
                     $cola->save();
                 }

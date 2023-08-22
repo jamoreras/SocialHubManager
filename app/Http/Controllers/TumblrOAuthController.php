@@ -99,7 +99,7 @@ class TumblrOAuthController extends Controller
             $data = [
                 'type' => 'text',
                 'title' => $request->title,
-                'body' => $request->body,
+                'body' => $request->message,
             ];
     
             try {
