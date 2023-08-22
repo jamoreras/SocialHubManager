@@ -22,8 +22,17 @@
                             <label for="subreddit">Subreddit:</label>
                             <input type="text" class="form-control" name="subreddit" id="subreddit" required>
                         </div>
-                        <button type="submit" class="btn btn-primary my-3">Submit Post</button>
+                        <button type="submit" class="btn btn-primary my-3">Publicar ahora</button>
+                        <button formaction="{{ route('addToQueue') }}" type="submit" class="btn btn-warning">Publicar en Cola</button>
                     </form>
+
+                    @if (session('success'))
+                        <div class="alert alert-success my-3" id="message">{{ session('success') }}</div>
+                    @endif
+
+                    @if (session('error'))
+                        <div class="alert alert-danger my-3" id="message">{{ session('error') }}</div>
+                    @endif
                 </div>
             </div>
         </div>

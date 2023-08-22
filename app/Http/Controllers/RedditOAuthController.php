@@ -12,7 +12,7 @@ use App\Models\RedditCredential;
 
 class RedditOAuthController extends Controller
 {
-    public function show(Request $request)
+    public function publicacionesReddit(Request $request)
     {
 
         return view('publicacionesReddit');
@@ -116,10 +116,10 @@ class RedditOAuthController extends Controller
 
             if ($response->success) {
 
-                return redirect('/home')->with('success', '¡Publicación en Reddit exitosa!');
+                return back()->with('success', '¡Publicación en Reddit exitosa!');
             } else {
 
-                return redirect('/home')->with('error', '¡Publicación en Reddit ha fallado!');
+                return back()->with('error', '¡Publicación en Reddit ha fallado!');
             }
         } else {
             return redirect('/home')->with('error', '¡No se encontraron las credenciales de Reddit!');

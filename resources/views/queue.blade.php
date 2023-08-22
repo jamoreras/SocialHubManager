@@ -36,6 +36,7 @@
                         <select name="social_media" class="form-control">
                             <option value="linkedin">LinkedIn</option>
                             <option value="reddit">Reddit</option>
+                            <option value="tumblr">Tumblr</option>
                             <!-- Agrega otras opciones de redes sociales según necesites -->
                         </select>
                     </div>

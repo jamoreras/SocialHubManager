@@ -13,11 +13,14 @@ return new class extends Migration
     {
         Schema::create('publications', function (Blueprint $table) {
             $table->id();
-            $table->string('message'); // Agregar columna "message"
-            $table->dateTime('scheduled_at'); // Agregar columna "scheduled_at"
-            $table->enum('status', ['pending', 'sent'])->default('pending'); // Agregar columna "status"
-            $table->string('social_media'); // Agregar columna "social_media"
+            $table->foreignId('user_id')->constrained();
+            $table->string('message');
+            $table->dateTime('scheduled_at')->nullable();
+            $table->string('social_media');
             $table->timestamps();
+            $table->string('title')->nullable(); 
+            $table->string('subreddit')->nullable(); 
+            $table->string('status')->nullable();
         });
     }
 

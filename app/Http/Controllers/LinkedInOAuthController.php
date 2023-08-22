@@ -96,7 +96,15 @@ class LinkedInOAuthController extends Controller
         // Limpiar la sesión
         session()->forget('linkedin_message');
 
-        return back()->with('success', '¡Publicación en LinkedIn exitosa!');
+        //return back()->with('success', '¡Publicación en LinkedIn exitosa!');
+        if ($response->successful()) {
+           
+            session()->forget('linkedin_message');
+            return back()->with('success', '¡Publicación en LinkedIn exitosa!');
+        } else {
+           
+            return back()->with('error', 'Error al publicar en LinkedIn');
+        }
     }
     public function publicacionesLinkedin(Request $request){  // Muestra la vista para las publicaciones en LinkedIn
 

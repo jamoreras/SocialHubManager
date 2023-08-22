@@ -25,10 +25,15 @@
                 </a>
                 <a class="navbar-brand" href="{{ url('/publicacionesLinkedin') }}">
                     Publicaciones LinkedIn</a>
-                <a class="navbar-brand" href="{{ route('reddit.post') }}">
+                <a class="navbar-brand" href="{{ url('/publicacionesReddit')}}">
                     Publicaciones Reddit</a>
-                    <a class="navbar-brand" href="{{ route('tumblr.post') }}">
+                <a class="navbar-brand" href="{{ url('/publicacionesTumblr')}}">
                     Publicaciones Tumblr</a>
+                <a class="navbar-brand" href="{{ url('/crudHorario') }}">
+                    Crud Horarios</a>
+                <a class="navbar-brand" href="{{ url('/queue') }}">
+                    Programar Mensaje</a>
+
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>

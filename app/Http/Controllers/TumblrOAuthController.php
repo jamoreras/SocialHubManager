@@ -15,7 +15,7 @@ use Tumblr\OAuth1\OAuth1Provider;
 
 class TumblrOAuthController extends Controller
 {
-    public function show(Request $request)
+    public function publicacionesTumblr(Request $request)
     {
 
         return view('publicacionesTumblr');
@@ -105,10 +105,10 @@ class TumblrOAuthController extends Controller
             try {
                 $client->createPost(env('TUMBLR_BLOG_NAME'), $data);
     
-                return redirect()->route('home')->with('success', 'Post created successfully.');
+                return redirect()->back()->with('success', '¡Publicación en Tumblr exitosa!');
             } catch (\Tumblr\API\RequestException $e) {
     
-                return redirect()->back()->with('error', 'An error occurred while creating the post: ' . $e->getMessage());
+                return redirect()->back()->with('error', '¡Publicación en Tumblr ha fallado!');
             }
 
             

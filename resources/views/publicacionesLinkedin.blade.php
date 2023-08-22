@@ -23,8 +23,17 @@
                             <label for="message" class="form-label">Mensaje a publicar en LinkedIn</label>
                             <input type="text" class="form-control" id="message" name="message" value="">
                         </div>
-                        <button type="submit" class="btn btn-primary">Publicar en LinkedIn</button>
+                        <button type="submit" class="btn btn-primary">Publicar ahora</button>
+                        <button formaction="{{ route('addToQueue') }}" type="submit" class="btn btn-warning">Publicar en Cola</button>
                     </form>
+
+                    @if (session('success'))
+                        <div class="alert alert-success my-3" id="message">{{ session('success') }}</div>
+                    @endif
+
+                    @if (session('error'))
+                        <div class="alert alert-danger my-3" id="message">{{ session('error') }}</div>
+                    @endif
                 </div>
             </div>
         </div>
