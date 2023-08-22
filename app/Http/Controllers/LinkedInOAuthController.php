@@ -15,13 +15,11 @@ class LinkedInOAuthController extends Controller
 //I need to capture a message and create a global variable from the user to post on linkedin
  
 
-    public function redirectToLinkedIn(Request $request)
-    {
+    public function redirectToLinkedIn(Request $request)// Redirige a la página de autorización de LinkedIn
+    {       
        
-        
-        // Hacer lo que necesitas con $valorCampo
         $state = bin2hex(random_bytes(16)); // Generar un valor único para el estado
-        session(['linkedin_state' => $state]);
+        session(['linkedin_state' => $state]);  // Almacena el estado en la sesión
   
 
         $queryParams = http_build_query([
@@ -35,7 +33,7 @@ class LinkedInOAuthController extends Controller
         return redirect('https://www.linkedin.com/oauth/v2/authorization?' . $queryParams);
     }
    
-    public function handleLinkedInCallback(Request $request)
+    public function handleLinkedInCallback(Request $request)  // Maneja el callback de autenticación de LinkedIn
     {
         $code = $request->query('code');
         $state = $request->query('state');
@@ -59,14 +57,14 @@ class LinkedInOAuthController extends Controller
         $accessToken = $response['access_token'];
         
         
-        // Puedes usar el $accessToken para hacer solicitudes a la API de LinkedIn
+               // Obtener el ID del usuario de LinkedIn
          $profile = Http::withToken($accessToken)->get('https://api.linkedin.com/v2/me');
          $code = $profile["id"];
          Session::put('linkedin_access_token', $accessToken);
          Session::put('linkedin_user_id', $code);
 
-        LinkedInCredential::updateOrCreate(
-            ['user_id' => Auth::id()], // Suponiendo que estás autenticando usuarios en tu aplicación
+        LinkedInCredential::updateOrCreate(      // Almacena el token de acceso y el ID del usuario en la sesión  
+            ['user_id' => Auth::id()], //
             [
                 'client_id' => $code,
                 'access_token' => $accessToken,
@@ -77,12 +75,12 @@ class LinkedInOAuthController extends Controller
 
         return redirect()->route('publicacionesLinkedin')->with('success', '¡Autenticación con LinkedIn exitosa!'); 
     }
-    public function sendLinkedInMessage(Request $request)
+    public function sendLinkedInMessage(Request $request)   // Envía un mensaje a LinkedIn
     {
         $accessToken = Session::get('linkedin_access_token');
         $code = Session::get('linkedin_user_id');
        
-        // Puedes usar el $accessToken para hacer solicitudes a la API de LinkedIn
+         // Construye la estructura del mensaje
       
         $estructura = [
             "owner" => "urn:li:person:{$code}",
@@ -90,7 +88,7 @@ class LinkedInOAuthController extends Controller
                 "text" => $request->input('message'),
             ],
         ];
-        $response = Http::withHeaders([
+        $response = Http::withHeaders([         // Realiza la solicitud de envío a LinkedIn
             'Authorization' => "Bearer {$accessToken}",
             'Content-Type' => 'application/json',
         ])->post('https://api.linkedin.com/v2/shares', $estructura);
@@ -100,7 +98,7 @@ class LinkedInOAuthController extends Controller
 
         return back()->with('success', '¡Publicación en LinkedIn exitosa!');
     }
-    public function publicacionesLinkedin(Request $request){
+    public function publicacionesLinkedin(Request $request){  // Muestra la vista para las publicaciones en LinkedIn
 
         return view('publicacionesLinkedin');
     }
