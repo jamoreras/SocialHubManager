@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use League\OAuth1\Client\Server\Tumblr;
 //use GuzzleHttp\Client;
 use Illuminate\Http\Request;
+use App\Models\TumblrCredential;
+use Illuminate\Support\Facades\Auth;
 
 
 use Tumblr\API\Client;
@@ -61,6 +63,14 @@ class TumblrOAuthController extends Controller
 
             if ($tokenCredentials) {
 
+                TumblrCredential::updateOrCreate(
+                    ['user_id' => Auth::id()],
+                    [
+                        'identifier' => $tokenCredentials->getIdentifier(),
+                        'secret' => $tokenCredentials->getSecret(),
+                    ]
+                );
+
 
                 session(['tumblr_token_credentials' => serialize($tokenCredentials)]); //identifier and secret
                 return redirect()->route('home')->with('success', 'Logged in with Tumblr.');
@@ -75,32 +85,37 @@ class TumblrOAuthController extends Controller
 
     public function sendTumblrMessage(Request $request)
     {
+   
+        $tumblrCredential = TumblrCredential::where('user_id', Auth::id())->first();
 
-        $serializedToken = session('tumblr_token_credentials');
+        if ($tumblrCredential) {
 
-        if (!$serializedToken) {
-            return redirect()->back()->with('message', 'Please authenticate with Tumblr to perform this action.');
-        }
+            $identifier = $tumblrCredential->identifier;
+            $secret = $tumblrCredential->secret;
+            $client = new Client(env('TUMBLR_CONSUMER_KEY'), env('TUMBLR_CONSUMER_SECRET'));
 
-        $tokenCredentials = unserialize($serializedToken);
+            $client->setToken($identifier, $secret);
 
-        $client = new Client(env('TUMBLR_CONSUMER_KEY'), env('TUMBLR_CONSUMER_SECRET'));
-        $client->setToken($tokenCredentials->getIdentifier(), $tokenCredentials->getSecret());
+            $data = [
+                'type' => 'text',
+                'title' => $request->title,
+                'body' => $request->body,
+            ];
+    
+            try {
+                $client->createPost(env('TUMBLR_BLOG_NAME'), $data);
+    
+                return redirect()->route('home')->with('success', 'Post created successfully.');
+            } catch (\Tumblr\API\RequestException $e) {
+    
+                return redirect()->back()->with('error', 'An error occurred while creating the post: ' . $e->getMessage());
+            }
 
-        $data = [
-            'type' => 'text',
-            'title' => $request->title,
-            'body' => $request->body,
-        ];
-
-        try {
-            $client->createPost(env('TUMBLR_BLOG_NAME'), $data);
             
-            return redirect()->route('home')->with('success', 'Post created successfully.');
-        } catch (\Tumblr\API\RequestException $e) {
-           
-            return redirect()->back()->with('error', 'An error occurred while creating the post: ' . $e->getMessage());
+        } else {
+            return redirect('/home')->with('error', '¡No se encontraron las credenciales de Tumblr!');
         }
-        
+       
+
     }
 }

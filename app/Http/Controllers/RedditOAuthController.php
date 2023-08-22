@@ -8,10 +8,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Session;
 use GuzzleHttp\Client;
+use App\Models\RedditCredential;
 
 class RedditOAuthController extends Controller
 {
-    public function show(Request $request){
+    public function show(Request $request)
+    {
 
         return view('publicacionesReddit');
     }
@@ -26,7 +28,8 @@ class RedditOAuthController extends Controller
             'response_type' => 'code',
             'state' => $state,
             'redirect_uri' => env('REDDIT_REDIRECT_URI'),
-            'duration' => 'temporary', // or 'temporary'
+            'duration' => 'temporary',
+            // or 'temporary'
             'scope' => 'submit', // Add more scopes as needed
         ]);
 
@@ -40,30 +43,36 @@ class RedditOAuthController extends Controller
 
         $state = $request->input('state');
         $redditState = session('reddit_state');
-    
-        if ($state !== $redditState) {
-            return redirect('/')->with('error', 'State mismatch. Possible CSRF attack.');
+
+        if ($state !== $redditState) {//seguridad ante terceros
+            return redirect('/home')->with('error', 'State mismatch. Possible attack.');
         }
-    
+
         $code = $request->input('code');
-    
+
         $response = Http::asForm()->withHeaders([
             'Authorization' => 'Basic ' . base64_encode(env('REDDIT_CLIENT_ID') . ':' . env('REDDIT_CLIENT_SECRET')),
         ])->post('https://www.reddit.com/api/v1/access_token', [
-            'grant_type' => 'authorization_code',
-            'code' => $code,
-            'redirect_uri' => route('reddit.callback'), 
-        ]);
+                    'grant_type' => 'authorization_code',
+                    'code' => $code,
+                    'redirect_uri' => route('reddit.callback'),
+                ]);
 
         if ($response->successful()) {
             $accessToken = $response['access_token'];
-    
-      
 
-           
+
+            RedditCredential::updateOrCreate(
+                ['user_id' => Auth::id()],
+                [
+                    'access_token' => $accessToken,
+                    'client_id' => $code,
+                ]
+            );
+
             Session::put('reddit_access_token', $accessToken);
             Session::put('reddit_user_id', $code);
-    
+
             return redirect('/home')->with('success', 'Logged in with Reddit.');
         } else {
             return redirect('/home')->with('error', 'Failed to authenticate with Reddit.');
@@ -77,7 +86,7 @@ class RedditOAuthController extends Controller
         $apiCallEndpoint = 'https://oauth.reddit.com/api/submit';
         $username = 'joe-tony';
         $accessTokenType = 'Bearer';
-        $accessToken = Session::get('reddit_access_token');
+        //$accessToken = Session::get('reddit_access_token');
         $postData = array(
             'text' => $request->text,
             'title' => $request->title,
@@ -85,28 +94,39 @@ class RedditOAuthController extends Controller
             'kind' => 'self'
         );
 
-        // curl settings and call to post to the subreddit
-        $ch = curl_init( $apiCallEndpoint );
-        curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
-        curl_setopt( $ch, CURLOPT_USERAGENT,  $request->subreddit . ' by /u/' . $username . ' (ISW 1.0)' );
-        curl_setopt( $ch, CURLOPT_HTTPHEADER, array( "Authorization: " . $accessTokenType . " " . $accessToken ) );
-        curl_setopt( $ch, CURLOPT_CUSTOMREQUEST, 'POST' );
-        curl_setopt( $ch, CURLOPT_POSTFIELDS, $postData );
-        curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, FALSE );
-        
-        // curl response from our post call
-        $response_raw = curl_exec( $ch );
-        $response = json_decode( $response_raw );
-        curl_close( $ch );
+        $redditCredential = RedditCredential::where('user_id', Auth::id())->first();
 
-     
-        if ($response->success) {
-           
-            return redirect('/home')->with('success', '¡Publicación en Reddit exitosa!');
+        if ($redditCredential) {
+            $accessToken = $redditCredential->access_token;
+
+            // curl settings and call to post to the subreddit
+            $ch = curl_init($apiCallEndpoint);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_USERAGENT, $request->subreddit . ' by /u/' . $username . ' (ISW 1.0)');
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array("Authorization: " . $accessTokenType . " " . $accessToken));
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+
+            // curl response from our post call
+            $response_raw = curl_exec($ch);
+            $response = json_decode($response_raw);
+            curl_close($ch);
+
+
+            if ($response->success) {
+
+                return redirect('/home')->with('success', '¡Publicación en Reddit exitosa!');
+            } else {
+
+                return redirect('/home')->with('error', '¡Publicación en Reddit ha fallado!');
+            }
         } else {
-           
-            return redirect('/home')->with('error', '¡Publicación en Reddit ha fallado!');
+            return redirect('/home')->with('error', '¡No se encontraron las credenciales de Reddit!');
         }
+
+
+
 
 
     }
