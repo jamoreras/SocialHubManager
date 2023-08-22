@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\HubCrudHorario;
 use App\Models\LinkedInCredential;
 use Illuminate\Support\Facades\Http;
+use App\Models\RedditCredential;
+use App\Models\TumblrCredential;
+use Tumblr\API\Client;
+
 
 class tarea extends Command
 {
@@ -51,34 +55,67 @@ class tarea extends Command
                     ])->post('https://api.linkedin.com/v2/shares', $estructura);
                     $cola->status = 'sent';//actualiza estado en cola 
                     $cola->save();
-                }else{//reddit // Envía el mensaje a otras redes sociales (Reddit u otras)
-                    //enviar mensaje
+                }else if ($cola->social_media === 'reddit') {
+                  
+                    $apiCallEndpoint = 'https://oauth.reddit.com/api/submit';
+                    $username = 'joe-tony';
+                    $accessTokenType = 'Bearer';
+                    $postData = array(
+                        'text' => $cola->message,
+                        'title' => $cola->title,
+                        'sr' => $cola->subreddit,
+                        'kind' => 'self'
+                    );
+
+                    $redditCredential = RedditCredential::where('user_id', $cola->user_id)->first();
+
+                    if ($redditCredential) {
+                        $accessToken = $redditCredential->access_token;
+
+                        // curl settings and call to post to the subreddit
+                        $ch = curl_init($apiCallEndpoint);
+                        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                        curl_setopt($ch, CURLOPT_USERAGENT, $cola->subreddit . ' by /u/' . $username . ' (ISW 1.0)');
+                        curl_setopt($ch, CURLOPT_HTTPHEADER, array("Authorization: " . $accessTokenType . " " . $accessToken));
+                        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+                        curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+                        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+
+                        // curl response from our post call
+                        $response_raw = curl_exec($ch);
+                        $response = json_decode($response_raw);
+                        curl_close($ch);
+                    }
                     
+                    $cola->status = 'sent';
+                    $cola->save();
+                }
+                else if ($cola->social_media === 'tumblr') {
+                  
+                    $tumblrCredential = TumblrCredential::where('user_id', $cola->user_id)->first();
+
+                    if ($tumblrCredential) {
+
+                        $identifier = $tumblrCredential->identifier;
+                        $secret = $tumblrCredential->secret;
+                        $client = new Client(env('TUMBLR_CONSUMER_KEY'), env('TUMBLR_CONSUMER_SECRET'));
+
+                        $client->setToken($identifier, $secret);
+
+                        $data = [
+                            'type' => 'text',
+                            'title' => $cola->title,
+                            'body' => $cola->message,
+                        ];
+                        $client->createPost(env('TUMBLR_BLOG_NAME'), $data);
+
+                    }
                     $cola->status = 'sent';
                     $cola->save();
                 }
 
                 Storage::append("archivo.txt", "Publicación enviada - " . $cola->message);  // Agrega una entrada al archivo de registro
-            } ///logica programadas       
-            if ($cola->status === 'pending' && $this->validarFecha($cola) && !empty($cola->scheduled_at)) {
-                if ($cola->social_media === 'linkedin') {
-                    $credlinke= $linkInts->getByUserId($cola->user_id);// Obtiene las credenciales de LinkedIn del usuario
-                    $estructura = [//estructura
-                        "owner" => "urn:li:person:{$credlinke->client_id}",
-                        "text" => [
-                            "text" => $cola->message,
-                        ],
-                    ];                 
-                    $response = Http::withHeaders([//envio  // Realiza la solicitud de envío a LinkedIn
-                        'Authorization' => "Bearer {$credlinke->access_token}",
-                        'Content-Type' => 'application/json',
-                    ])->post('https://api.linkedin.com/v2/shares', $estructura);
-                    $cola->status = 'sent';//actualiza estado en cola 
-                    $cola->save();
-                }
-                Storage::append("archivo.txt", "Publicación programada - " . $cola->message);
-            }
-                
+            } 
             
         }
 

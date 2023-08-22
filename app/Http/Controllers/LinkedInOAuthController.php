@@ -41,7 +41,7 @@ class LinkedInOAuthController extends Controller
 
         // Verificar que el estado coincida con el almacenado en la sesión
         if ($state !== session('linkedin_state')) {
-            return redirect()->route('dashboard')->with('error', 'Error de autenticación con LinkedIn');
+            return redirect()->route('home')->with('error', 'Error de autenticación con LinkedIn');
         }
 
         // Intercambiar el código de autorización por un token de acceso
