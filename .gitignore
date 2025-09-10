@@ -1,19 +1,84 @@
-/.phpunit.cache
-/node_modules
-/public/build
+# Laravel & PHP Specific Ignore File
+
+# ========================
+# Environment & Configuration
+# ========================
+.env
+.env.*.local
+.env.production
+.env.backup
+.env.example
+.phpunit.result.cache
+
+# ========================
+# Dependency Directories
+# ========================
+/vendor/
+/node_modules/
+/bower_components/
+
+# ========================
+# Runtime Files & Logs
+# ========================
+/storage/*.key
+/storage/framework/cache/data/
+/storage/framework/sessions/
+/storage/framework/views/
+*.log
+npm-debug.log*
+yarn-error.log
+
+# ========================
+# Build Assets
+# ========================
+/public/build/
 /public/hot
 /public/storage
-/storage/*.key
-/vendor
-.env
-.env.backup
-.env.production
+/public/mix-manifest.json
+
+# ========================
+# Development & IDE Files
+# ========================
+/.fleet/
+/.idea/
+/.vscode/
+/.phpunit.cache
 .phpunit.result.cache
+
+# ========================
+# Deployment & Local Setup
+# ========================
 Homestead.json
 Homestead.yaml
 auth.json
-npm-debug.log
-yarn-error.log
-/.fleet
-/.idea
-/.vscode
+/.nova/
+/Valet/
+
+# ========================
+# Operating System Files
+# ========================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# ========================
+# Optional Testing & Coverage
+# ========================
+/coverage/
+/.phpunit.result.cache
+
+# ========================
+# Laravel Specific Ignore
+# ========================
+/bootstrap/cache/packages.php
+/bootstrap/cache/services.php
+/bootstrap/cache/config.php
+
+# ========================
+# Composer (if not ignoring vendor)
+# ========================
+/composer.lock
