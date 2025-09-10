@@ -22,8 +22,8 @@ A Laravel-based web application for scheduling and publishing posts to multiple 
 
 1. **Clone the repository**:
    ```bash
-   git clone <your-repo-url>
-   cd social-media-scheduler
+   git clone https://github.com/jamoreras/SocialHubManager.git
+   cd SocialHubManager
    ```
 
 2. **Install dependencies**:
