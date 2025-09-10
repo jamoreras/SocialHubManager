@@ -1,6 +1,6 @@
 # Social Media Scheduler
 
-A Laravel-based web application for scheduling and publishing posts to multiple social media platforms (LinkedIn, Reddit, Tumblr) using OAuth 2.0 integration.
+A full-stack web application built with **Laravel backend** and **Angular frontend** for scheduling and publishing posts to multiple social media platforms (LinkedIn, Reddit, Tumblr) using OAuth 2.0 integration.
 
 ## ✨ Features
 
@@ -9,14 +9,16 @@ A Laravel-based web application for scheduling and publishing posts to multiple 
 - **Post Scheduling**: Schedule content for specific dates and times  
 - **Calendar Interface**: Visual calendar for managing scheduled posts  
 - **Protected Access**: Middleware ensures only authenticated users can access features  
+- **Responsive UI**: Dynamic Angular frontend for seamless user experience
 
 ## 🛠️ Tech Stack
 
 - **Backend**: Laravel 8.x/9.x (PHP)  
+- **Frontend**: Angular, TypeScript, HTML5, CSS3
 - **Database**: MySQL  
-- **Authentication**: Laravel Auth  
-- **Frontend**: Blade templates, JavaScript, CSS  
-- **APIs**: LinkedIn API, Reddit API, Tumblr API  
+- **Authentication**: Laravel Auth + JWT  
+- **API Communication**: RESTful APIs
+- **Third-Party APIs**: LinkedIn API, Reddit API, Tumblr API
 
 ## 🚀 Installation
 
